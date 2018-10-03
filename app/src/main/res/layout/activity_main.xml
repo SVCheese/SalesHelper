@@ -4,15 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".main.MainActivity">
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/welcome_tv"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.029" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/WelcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/app_name_ru"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="120dp"
+        android:text="@string/select_action_tv"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/open_warehouse_btn"
+        app:layout_constraintStart_toStartOf="@+id/open_warehouse_btn"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/open_warehouse_btn"
+        android:layout_width="@dimen/a_main_btn_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="96dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/open_warehouse_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/open_cashbox_btn"
+        android:layout_width="@dimen/a_main_btn_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/a_main_btn_marginTop"
+        android:text="@string/open_cashbox_btn"
+        app:layout_constraintStart_toStartOf="@+id/open_warehouse_btn"
+        app:layout_constraintTop_toBottomOf="@+id/open_warehouse_btn" />
+
+    <Button
+        android:id="@+id/show_reports_btn"
+        android:text="@string/show_reports_btn"
+        android:layout_width="@dimen/a_main_btn_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/a_main_btn_marginTop"
+        app:layout_constraintStart_toStartOf="@+id/open_cashbox_btn"
+        app:layout_constraintTop_toBottomOf="@+id/open_cashbox_btn" />
+
+    <Button
+        android:id="@+id/edit_users_btn"
+        android:text="@string/edit_users_btn"
+        android:layout_width="@dimen/a_main_btn_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/a_main_btn_marginTop"
+        app:layout_constraintStart_toStartOf="@+id/show_reports_btn"
+        app:layout_constraintTop_toBottomOf="@+id/show_reports_btn" />
+
 
 </android.support.constraint.ConstraintLayout>

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SalesHelper</string>
+    <string name="app_name_ru">"Помощник продаж"</string>
+    <string name="welcome_tv">Вас приветствует программа</string>
+    <string name="select_action_tv">Что Вы желаете сделать?</string>
+    <!--<string name="add_goods_btn">Работать со складом</string>-->
+    <string name="open_warehouse_btn">Работать со складом</string>
+    <string name="open_cashbox_btn">Открыть кассу</string>
+    <string name="show_reports_btn">Смотреть отчеты</string>
+    <string name="edit_users_btn">Пользователи</string>
+
+    <!-- Toast messages-->
+    <string name="select_another_action">Выберите другое действие</string>
+
 </resources>
