@@ -2,4 +2,8 @@
 <resources>
     <dimen name="a_main_btn_marginTop">15dp</dimen>
     <dimen name="a_main_btn_width">200dp</dimen>
+    <dimen name="a_add_goods_btn_width">100dp</dimen>
+    <dimen name="a_add_goods_btn_height">36dp</dimen>
+
+
 </resources>

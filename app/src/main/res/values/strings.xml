@@ -3,13 +3,40 @@
     <string name="app_name_ru">"Помощник продаж"</string>
     <string name="welcome_tv">Вас приветствует программа</string>
     <string name="select_action_tv">Что Вы желаете сделать?</string>
-    <!--<string name="add_goods_btn">Работать со складом</string>-->
+
+    <!--MainActivity-->
     <string name="open_warehouse_btn">Работать со складом</string>
     <string name="open_cashbox_btn">Открыть кассу</string>
     <string name="show_reports_btn">Смотреть отчеты</string>
     <string name="edit_users_btn">Пользователи</string>
+    <string name="select_another_action">Выберите другое действие</string>
+
+    <!--WarehouseActivity-->
+    <string name="a_warehouse_btn_add_goods">Добавить товар</string>
+    <string name="a_warehouse_tv_goods_in_group">Товары в группе</string>
+    <string name="a_warehouse_tv_total_pcs">Всего: 100 шт.</string>
+    <string name="a_warehouse_tv_total_price">На сумму: 100000 руб.</string>
+
+    <!--Common-->
+    <string name="tv_pcs">шт.</string>
+    <string name="tv_rub">руб.</string>
+    <string name="tv_total">Всего:</string>
+    <string name="tv_total_price">На сумму:</string>
+
+    <!--AddGoodsActivity-->
+    <string name="a_add_goods_tv_name">Наименование</string>
+    <string name="a_add_goods_tv_inner_code">Код:</string>
+    <string name="a_add_goods_tvf_inner_code">100000</string>
+    <string name="a_add_goods_tv_group">Группа товара</string>
+    <string name="a_add_goods_spn_group">0</string>
+    <string name="a_add_goods_tv_quantity">Количество</string>
+    <string name="a_add_goods_et_quantity">0</string>
+    <string name="a_add_goods_tv_purchase_price">Цена закупки</string>
+    <string name="a_add_goods_et_purchase_price">0</string>
+    <string name="a_add_goods_tv_price">Цена продажи</string>
+    <string name="a_add_goods_et_price">0</string>
+    <string name="a_add_goods_btn_save">Сохранить</string>
 
     <!-- Toast messages-->
-    <string name="select_another_action">Выберите другое действие</string>
 
 </resources>

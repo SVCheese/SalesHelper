@@ -2,6 +2,7 @@ package cheese.soft.saleshelper.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.Button;
 
@@ -18,8 +19,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainContract = new MainPresenter(this);
 
-        Button add_goods_btn = findViewById(R.id.open_warehouse_btn);
-        add_goods_btn.setOnClickListener(this);
+        Button open_warehouse_btn = findViewById(R.id.open_warehouse_btn);
+        open_warehouse_btn.setOnClickListener(this);
         Button open_cashbox_btn = findViewById(R.id.open_cashbox_btn);
         open_cashbox_btn.setOnClickListener(this);
         Button show_reports_btn = findViewById(R.id.show_reports_btn);
