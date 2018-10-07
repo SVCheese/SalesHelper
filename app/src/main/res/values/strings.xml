@@ -37,6 +37,16 @@
     <string name="a_add_goods_et_price">0</string>
     <string name="a_add_goods_btn_save">Сохранить</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!-- Toast messages-->
+
+    <!--Temp-->
+    <string name="message_text">Text of your message</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="maybe">Maybe</string>
+    <string name="dialog_1">Dialog 1</string>
 
 </resources>

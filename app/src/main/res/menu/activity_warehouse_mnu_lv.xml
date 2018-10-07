@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/activity_warehouse_mnu_lv_group_edit">
+        <item
+            android:id="@+id/activity_warehouse_mnu_lv_add"
+            android:orderInCategory="1"
+            android:title="Докупить товар"></item>
+        <item
+            android:id="@+id/activity_warehouse_mnu_lv_qty"
+            android:orderInCategory="2"
+            android:title="Изменить остатки"></item>
+        <item
+            android:id="@+id/activity_warehouse_mnu_lv_edit"
+            android:orderInCategory="3"
+            android:title="Редактировать товар"></item>
+    </group>
+    <item
+        android:id="@+id/activity_warehouse_mnu_lv_delete"
+        android:orderInCategory="5"
+        android:title="Удалить товар"></item>
+</menu>

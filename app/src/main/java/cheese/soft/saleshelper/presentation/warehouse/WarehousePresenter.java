@@ -1,90 +1,78 @@
 package cheese.soft.saleshelper.presentation.warehouse;
 
+import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import cheese.soft.saleshelper.R;
-import cheese.soft.saleshelper.data.db.DBHelper;
+import cheese.soft.saleshelper.TwoButtonDialog;
+import cheese.soft.saleshelper.data.db.BDHandlerContract;
+import cheese.soft.saleshelper.data.db.DBHandler;
 import cheese.soft.saleshelper.data.db.DBTables;
 import cheese.soft.saleshelper.data.model.Goods;
 
 public class WarehousePresenter implements WarehouseContract {
 
     final String LOG_TAG = "myLogs";
-    AppCompatActivity activity;
-    //DBHandler db;
-    //Loader<String> loader;
+    final String DIALOG_DELETE_GOODS = "DeleteGoods";
+    final String DIALOG_EDIT_GOODS = "EditGoods";
 
-    Cursor cursor;
-    SimpleCursorAdapter scAdapter;
-
-    ListView lvMain;
+    private static long DB_RECORD_ID = 0;
 
     private final Context context;
-    private DBHelper dbHelper;
-    private SQLiteDatabase db;
+    AppCompatActivity activity;
+
+    BDHandlerContract db;
+    SimpleCursorAdapter scAdapter;
+
+    ListView lv;
+    Map<String, DialogFragment> dialogs;
 
     public WarehousePresenter(Context context) {
         this.context = context;
         this.activity = (AppCompatActivity) context;
 
-        lvMain = (ListView) activity.findViewById(R.id.a_warehouse_lv);
+        db = new DBHandler(context);
+        db.openDBConnection();
 
-        openDBConnection();
+        lv = (ListView) activity.findViewById(R.id.a_warehouse_lv);
 
-        cursor = getAllData();
-        activity.startManagingCursor(cursor);
+        String[] from = new String[]{DBTables.GOODS_INNER_CODE, DBTables.GOODS_NAME, DBTables.GOODS_PURCHASE_PRICE};
+        int[] to = new int[]{R.id.textView1, R.id.textView2, R.id.textView3};
 
-        // формируем столбцы сопоставления
-        String[] from = new String[] { DBTables.GOODS_INNER_CODE, DBTables.GOODS_NAME, DBTables.GOODS_PURCHASE_PRICE };
-        int[] to = new int[] { R.id.textView1, R.id.textView2, R.id.textView3 };
+        scAdapter = new SimpleCursorAdapter(context, R.layout.item, null, from, to, 0);
+        lv.setAdapter(scAdapter);
 
-        // создаем адаптер и настраиваем список
-        scAdapter = new SimpleCursorAdapter(context, R.layout.item, cursor, from, to);
-
-        lvMain.setAdapter(scAdapter);
-
-        // добавляем контекстное меню к списку
-        activity.registerForContextMenu(lvMain);
-
-        //loadGoods();
+        dialogs = new HashMap<String, DialogFragment>();
     }
 
     @Override
     public void activityDestroy() {
-        closeDBConnection();
-    }
-
-    public void openDBConnection() {
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
-    }
-
-    public void closeDBConnection() {
-        if (dbHelper != null) dbHelper.close();
-    }
-
-    // получить все данные из таблицы DB_TABLE
-    public Cursor getAllData() {
-        return db.query(DBTables.TABLE_GOODS, null, null, null, null, null, null);
+        db.closeDBConnection();
     }
 
     public void loadGoods() {
         Goods goods;
         List<Goods> goodsList = null;
 
-        Cursor cur = db.query(DBTables.TABLE_GOODS, null, null, null, null, null, null);
+        Cursor cur = db.getAllTableDataCursor(DBTables.TABLE_GOODS);
 
         if (cur != null && cur.moveToFirst()) {
 
@@ -106,7 +94,7 @@ public class WarehousePresenter implements WarehouseContract {
                 goods.setPurchase_price(cur.getDouble(purchase_price));
                 goods.setPrice(cur.getDouble(price));
 
-                Log.d(LOG_TAG,goods.getId() + " . " + goods.getInner_code() + " . " + goods.getName());
+                Log.d(LOG_TAG, goods.getId() + " . " + goods.getInner_code() + " . " + goods.getName());
 
                 goodsList.add(goods);
 
@@ -121,11 +109,11 @@ public class WarehousePresenter implements WarehouseContract {
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.activity_warehouse_item, names);
 
-        lvMain.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         //ArrayAdapter<Goods> adapter = new ArrayAdapter<Goods>(context, R.layout.activity_warehouse_item, goodsList);
         ArrayAdapter<Goods> adapter = new ArrayAdapter<Goods>(context, R.layout.activity_warehouse_simple_item, goodsList);
 
-        lvMain.setAdapter(adapter);
+        lv.setAdapter(adapter);
 
         /*public void onClick(View arg0) {
             // пишем в лог выделенные элементы
@@ -149,16 +137,17 @@ public class WarehousePresenter implements WarehouseContract {
         cv.put(DBTables.GOODS_PURCHASE_PRICE, goods.getPurchase_price());
         cv.put(DBTables.GOODS_PRICE, goods.getPrice());
 
-        long rowID = db.insert(DBTables.TABLE_GOODS, null, cv);
+        long rowID = db.insertRecord(DBTables.TABLE_GOODS, cv);
+
+        activity.getSupportLoaderManager().getLoader(0).forceLoad();
 
         Log.d(LOG_TAG, "row inserted, ID = " + rowID);
     }
 
-    @Override
-    public void buttonClick(View v) {
+    public void buttonClick(int buttonId) {
         //Intent intent = null;
 
-        switch (v.getId()) {
+        switch (buttonId) {
             case R.id.add_goods_btn:
                 //intent = new Intent(activity, AddGoodsActivity.class);
 
@@ -168,7 +157,7 @@ public class WarehousePresenter implements WarehouseContract {
             case R.id.button1:
                 //intent = new Intent(activity, AddGoodsActivity.class);
 
-                loadGoods();
+                //loadGoods();
                 break;
         }
 
@@ -180,44 +169,93 @@ public class WarehousePresenter implements WarehouseContract {
         activity.startActivity(intent);*/
     }
 
-    /*@Override
-    public void LoadDataFromDB(Context context, Loader<String> loader) {
-*/
-        /*// открываем подключение к БД
-        db = new DBHandler(context);
-        db.open();
+    @Override
+    public boolean menuClick(int itemId, long dbRecordId) {
 
-        // формируем столбцы сопоставления
-        String[] from = new String[] { DB.COLUMN_IMG, DB.COLUMN_TXT };
-        int[] to = new int[] { R.id.ivImg, R.id.tvText };
+        DB_RECORD_ID = dbRecordId;
 
-        // создаем адаптер и настраиваем список
-        scAdapter = new SimpleCursorAdapter(context, R.layout.activity_warehouse_item, null, from, to, 0);
+        switch (itemId) {
+            case R.id.activity_warehouse_mnu_lv_add:
+                // TODO Add goods
+                Log.d(LOG_TAG, "Add goods, ID = " + dbRecordId);
+                break;
 
-        ListView lvData = (ListView) activity.findViewById(R.id.a_warehouse_lv);
-        lvData.setAdapter(scAdapter);*/
-    //}
+            case R.id.activity_warehouse_mnu_lv_qty:
+                // TODO Change goods amount
+                Log.d(LOG_TAG, "Change goods amount, ID = " + dbRecordId);
+                break;
 
+            case R.id.activity_warehouse_mnu_lv_edit:
+                if (!dialogs.containsKey(DIALOG_EDIT_GOODS)) {
+                    TwoButtonDialog dialog = TwoButtonDialog.newInstance("Редактирование товара", "Редактировать выбранный товар?", null, null);
+                    dialogs.put(DIALOG_EDIT_GOODS, dialog);
+                }
 
-    /*static class MyCursorLoader extends CursorLoader {
+                dialogs.get(DIALOG_EDIT_GOODS).show(activity.getFragmentManager(), DIALOG_EDIT_GOODS);
 
-        DBHandler db;
+                //Toast.makeText(activity, "EditGoods", Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "Edit goods, ID: " + dbRecordId + " Hash: " + dialogs.get(DIALOG_EDIT_GOODS).hashCode());
+                break;
 
-        public MyCursorLoader(Context context, DBHandler db) {
+            case R.id.activity_warehouse_mnu_lv_delete:
+                if (!dialogs.containsKey(DIALOG_DELETE_GOODS)) {
+                    TwoButtonDialog dialog = TwoButtonDialog.newInstance("Удаление товара", "Удалить выбранный товар?", null, null);
+                    dialogs.put(DIALOG_DELETE_GOODS, dialog);
+                }
+
+                dialogs.get(DIALOG_DELETE_GOODS).show(activity.getFragmentManager(), DIALOG_DELETE_GOODS);
+
+                //Toast.makeText(activity, "DeleteGoods", Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "Delete goods, ID: " + dbRecordId + " Hash: " + dialogs.get(DIALOG_DELETE_GOODS).hashCode());
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void dialogClick(String dialogTag, boolean result) {
+        switch (dialogTag) {
+            case DIALOG_EDIT_GOODS:
+                // TODO Edit goods
+                Toast.makeText(activity, "EditGoods: " + DB_RECORD_ID + " res: " + result, Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "Edit goods, ID: " + DB_RECORD_ID + " res: " + result);
+                break;
+
+            case DIALOG_DELETE_GOODS:
+
+                if (result) db.deleteRecordById(DB_RECORD_ID, DBTables.TABLE_GOODS);
+
+                activity.getSupportLoaderManager().getLoader(0).forceLoad();
+                Toast.makeText(activity, "DeleteGoods: " + DB_RECORD_ID + " res: " + result, Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG, "Delete goods, ID: " + DB_RECORD_ID + " res: " + result);
+                break;
+        }
+    }
+
+    public MyCursorLoader GetMyCursorLoader() {
+        return new MyCursorLoader(context, db);
+    }
+
+    public void swapCursor(Cursor cursor) {
+        scAdapter.swapCursor(cursor);
+    }
+
+    static class MyCursorLoader extends CursorLoader {
+
+        BDHandlerContract db;
+        final String LOG_TAG = "myLogs";
+
+        public MyCursorLoader(Context context, BDHandlerContract db) {
             super(context);
             this.db = db;
         }
 
         @Override
         public Cursor loadInBackground() {
-            *//*Cursor cursor = db.getAllData();
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return cursor;*//*
-            return null;
+            Cursor cursor = db.getAllTableDataCursor(DBTables.TABLE_GOODS);
+            Log.d(LOG_TAG, "loadInBackground");
+            return cursor;
         }
-    }*/
+    }
 }
