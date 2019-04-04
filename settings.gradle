@@ -1,1 +1,1 @@
-include ':app', ':cursorloader', ':dialogfragment', ':spinner'
+include ':app', ':cursorloader', ':dialogfragment', ':spinner', ':loader'
