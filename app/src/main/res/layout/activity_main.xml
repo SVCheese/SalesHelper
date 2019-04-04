@@ -49,7 +49,7 @@
         android:id="@+id/open_warehouse_btn"
         android:layout_width="@dimen/a_main_btn_width"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="98dp"
         android:layout_marginStart="96dp"
         android:layout_marginTop="20dp"
         android:text="@string/open_warehouse_btn"
