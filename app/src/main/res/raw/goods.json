@@ -1,0 +1,92 @@
+[
+  {
+    "id": 0,
+    "inner_code": 100001,
+    "group_id": 1,
+    "name": "Арахисовая паста «Шоколадная», 300 г",
+    "quantity": 5,
+    "purchase_price": 200.0,
+    "price": 300.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100002,
+    "group_id": 1,
+    "name": "Кокосовый крем «Миндаль и Кедр», 150 г",
+    "quantity": 3,
+    "purchase_price": 150.0,
+    "price": 240.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100003,
+    "group_id": 1,
+    "name": "Клюква в яблочном соке 100гр, Super Green Food",
+    "quantity": 4,
+    "purchase_price": 100.0,
+    "price": 180.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100004,
+    "group_id": 1,
+    "name": "Здоровый фруктовый перекус \"Банан\"",
+    "quantity": 10,
+    "purchase_price": 50.0,
+    "price": 100.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100005,
+    "group_id": 1,
+    "name": "Суперполезный завтрак \"7 семян\"",
+    "quantity": 20,
+    "purchase_price": 25.0,
+    "price": 75.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100006,
+    "group_id": 2,
+    "name": "Чашка чайная декор",
+    "quantity": 5,
+    "purchase_price": 50.0,
+    "price": 100.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100007,
+    "group_id": 0,
+    "name": "Кувшин винный лепка, с ручкой. Объем 4л.",
+    "quantity": 3,
+    "purchase_price": 300.0,
+    "price": 600.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100008,
+    "group_id": 0,
+    "name": "Тарела плоская. Диаметр 20см.",
+    "quantity": 8,
+    "purchase_price": 70.0,
+    "price": 180.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100009,
+    "group_id": 0,
+    "name": "Пловница декор №2. Объем 1.5л.",
+    "quantity": 4,
+    "purchase_price": 170.0,
+    "price": 400.0
+  },
+  {
+    "id": 0,
+    "inner_code": 100010,
+    "group_id": 0,
+    "name": "Компотник лепка. Объём 2.5л.",
+    "quantity": 2,
+    "purchase_price": 200.0,
+    "price": 450.0
+  }
+]

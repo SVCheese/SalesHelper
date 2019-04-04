@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<goods>
+    <group name="Здоровая еда">
+        <item>
+            <inner-code>100001</inner-code>
+            <name>Арахисовая паста «Шоколадная», 300 г</name>
+            <quantity>5</quantity>
+            <purchase-price>200</purchase-price>
+            <price>300</price>
+        </item>
+        <item>
+            <inner-code>100002</inner-code>
+            <name>Кокосовый крем «Миндаль и Кедр», 150 г</name>
+            <quantity>3</quantity>
+            <purchase-price>150</purchase-price>
+            <price>240</price>
+        </item>
+        <item>
+            <inner-code>100003</inner-code>
+            <name>Клюква в яблочном соке 100гр, Super Green Food</name>
+            <quantity>4</quantity>
+            <purchase-price>100</purchase-price>
+            <price>180</price>
+        </item>
+        <item>
+            <inner-code>100004</inner-code>
+            <name>Здоровый фруктовый перекус "Банан"</name>
+            <quantity>10</quantity>
+            <purchase-price>50</purchase-price>
+            <price>100</price>
+        </item>
+        <item>
+            <inner-code>100005</inner-code>
+            <name>Суперполезный завтрак "7 семян"</name>
+            <quantity>20</quantity>
+            <purchase-price>25</purchase-price>
+            <price>75</price>
+        </item>
+    </group>
+    <group name="Красная глина">
+        <item>
+            <inner-code>100006</inner-code>
+            <name>Чашка чайная декор</name>
+            <quantity>5</quantity>
+            <purchase-price>50</purchase-price>
+            <price>150</price>
+        </item>
+        <item>
+            <inner-code>100007</inner-code>
+            <name>Кувшин винный лепка, с ручкой. Объем 4л.</name>
+            <quantity>3</quantity>
+            <purchase-price>300</purchase-price>
+            <price>600</price>
+        </item>
+        <item>
+            <inner-code>100008</inner-code>
+            <name>Тарела плоская. Диаметр 20см.</name>
+            <quantity>8</quantity>
+            <purchase-price>70</purchase-price>
+            <price>180</price>
+        </item>
+        <item>
+            <inner-code>100009</inner-code>
+            <name>Пловница декор №2. Объем 1.5л.</name>
+            <quantity>4</quantity>
+            <purchase-price>170</purchase-price>
+            <price>400</price>
+        </item>
+        <item>
+            <inner-code>100010</inner-code>
+            <name>Компотник лепка. Объём 2.5л.</name>
+            <quantity>2</quantity>
+            <purchase-price>200</purchase-price>
+            <price>450</price>
+        </item>
+    </group>
+</goods>

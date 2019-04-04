@@ -4,26 +4,28 @@
     <string name="welcome_tv">Вас приветствует программа</string>
     <string name="select_action_tv">Что Вы желаете сделать?</string>
 
-    <!--MainActivity-->
+    <!-- MainActivity -->
     <string name="open_warehouse_btn">Работать со складом</string>
     <string name="open_cashbox_btn">Открыть кассу</string>
     <string name="show_reports_btn">Смотреть отчеты</string>
     <string name="edit_users_btn">Пользователи</string>
     <string name="select_another_action">Выберите другое действие</string>
 
-    <!--WarehouseActivity-->
+    <!-- WarehouseActivity -->
     <string name="a_warehouse_btn_add_goods">Добавить товар</string>
     <string name="a_warehouse_tv_goods_in_group">Товары в группе</string>
     <string name="a_warehouse_tv_total_pcs">Всего: 100 шт.</string>
     <string name="a_warehouse_tv_total_price">На сумму: 100000 руб.</string>
 
-    <!--Common-->
+    <!-- Common -->
+    <string name="log_tag">myLogs</string>
     <string name="tv_pcs">шт.</string>
     <string name="tv_rub">руб.</string>
+    <string name="tv_qty">Кол-во:</string>
     <string name="tv_total">Всего:</string>
     <string name="tv_total_price">На сумму:</string>
 
-    <!--AddGoodsActivity-->
+    <!-- AddGoodsActivity -->
     <string name="a_add_goods_tv_name">Наименование</string>
     <string name="a_add_goods_tv_inner_code">Код:</string>
     <string name="a_add_goods_tvf_inner_code">100000</string>
@@ -37,8 +39,19 @@
     <string name="a_add_goods_et_price">0</string>
     <string name="a_add_goods_btn_save">Сохранить</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- DB -->
+    <string name="no_group">Без группы</string>
+    <string-array name="groups">
+        <item>Все</item>
+        <item>@string/no_group</item>
+    </string-array>
+    <string name="start_group1">Здоровая еда</string>
+    <string name="start_group2">Красная глина</string>
+    <string name="goods_name">Арахисовая паста «Шоколадная», 300 г</string>
+    <string name="goods_inner_code">100001</string>
+    <string name="goods_quantity">5</string>
+    <string name="goods_purchase_price">200</string>
+    <string name="goods_price">300</string>
 
     <!-- Toast messages-->
 

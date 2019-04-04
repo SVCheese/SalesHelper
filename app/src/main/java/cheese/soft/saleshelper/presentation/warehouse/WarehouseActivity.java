@@ -1,7 +1,5 @@
 package cheese.soft.saleshelper.presentation.warehouse;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,21 +14,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
-import cheese.soft.saleshelper.TwoButtonDialog;
 import cheese.soft.saleshelper.R;
+import cheese.soft.saleshelper.TwoButtonDialog;
 
 public class WarehouseActivity extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>,
-        TwoButtonDialog.NoticeDialogListener {
+        TwoButtonDialog.NoticeDialogListener, AdapterView.OnItemSelectedListener {
 
     WarehouseContract warehouseContract;
 
-    ListView lv;
-
-    //final int DIALOG_DELETE_RECORD = 1;
     final String LOG_TAG = "myLogs";
 
-    //DialogFragment dialog;
+    ListView lv;
+    Spinner spn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,32 +39,14 @@ public class WarehouseActivity extends AppCompatActivity implements View.OnClick
         Button button1 = findViewById(R.id.button1);
         button1.setOnClickListener(this);
 
-        lv = (ListView) findViewById(R.id.a_warehouse_lv);
+        spn = findViewById(R.id.a_warehouse_spn);
+        spn.setOnItemSelectedListener(this);
+
+        lv = findViewById(R.id.a_warehouse_lv);
         registerForContextMenu(lv);
 
         warehouseContract = new WarehousePresenter(this);
-
-        //dialog = TwoButtonDialog.newInstance("Удаление товара", "Удалить выбранный товар?", null, null);
-
-        getSupportLoaderManager().initLoader(0, null, this);
-    }
-
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
-        getMenuInflater().inflate(R.menu.activity_warehouse_mnu_lv, menu);
-
-        super.onCreateContextMenu(menu, v, menuInfo);
-    }
-
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        if (warehouseContract.menuClick(item.getItemId(), acmi.id)) {
-            getSupportLoaderManager().getLoader(0).forceLoad();
-            return true;
-        }
-
-        return super.onContextItemSelected(item);
+        warehouseContract.initLoaders();
     }
 
     @Override
@@ -82,9 +61,35 @@ public class WarehouseActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        warehouseContract.onItemSelected(id);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
+
+    @Override
     public void onDialogClick(String dialogTag, boolean result) {
         warehouseContract.dialogClick(dialogTag, result);
         //Log.d(LOG_TAG, "Dialog tag: " + dialogTag + " click");
+    }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        getMenuInflater().inflate(R.menu.activity_warehouse_mnu_lv, menu);
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (warehouseContract.menuClick(item.getItemId(), acmi.id)) {
+            return true;
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     // -----------------------------------------------------------------------------------------------
@@ -92,15 +97,18 @@ public class WarehouseActivity extends AppCompatActivity implements View.OnClick
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return warehouseContract.GetMyCursorLoader();
+        Log.d(LOG_TAG, "onCreateLoader(" + i + ", " + bundle + ");");
+        return warehouseContract.GetMyCursorLoader(i, bundle);
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        warehouseContract.swapCursor(cursor);
+        Log.d(LOG_TAG, "onLoadFinished(" + loader.getId() + ", " + cursor.toString().replace("android.database.sqlite.", "") + ");");
+        warehouseContract.swapCursor(loader.getId(), cursor);
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        Log.d(LOG_TAG, "onLoaderReset(" + loader.getId() + ");");
     }
 }

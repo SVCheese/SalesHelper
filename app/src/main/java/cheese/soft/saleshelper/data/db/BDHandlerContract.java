@@ -7,6 +7,8 @@ public interface BDHandlerContract {
     void openDBConnection();
     void closeDBConnection();
     Cursor getAllTableDataCursor(String tableName);
-    void deleteRecordById(long id, String tableName);
+    Cursor getGoodsCursor(String tableName, long id);
     long insertRecord(String tableName, ContentValues cv);
+    int updateRecordById(String tableName, ContentValues cv, String id);
+    int deleteRecordById(String tableName, long id);
 }

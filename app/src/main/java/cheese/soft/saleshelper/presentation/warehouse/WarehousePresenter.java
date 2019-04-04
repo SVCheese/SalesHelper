@@ -4,63 +4,77 @@ import android.app.DialogFragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.CursorLoader;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import cheese.soft.saleshelper.R;
 import cheese.soft.saleshelper.TwoButtonDialog;
 import cheese.soft.saleshelper.data.db.BDHandlerContract;
 import cheese.soft.saleshelper.data.db.DBHandler;
 import cheese.soft.saleshelper.data.db.DBTables;
+import cheese.soft.saleshelper.data.db.MyCursorLoader;
 import cheese.soft.saleshelper.data.model.Goods;
 
 public class WarehousePresenter implements WarehouseContract {
 
-    final String LOG_TAG = "myLogs";
-    final String DIALOG_DELETE_GOODS = "DeleteGoods";
-    final String DIALOG_EDIT_GOODS = "EditGoods";
+    private final String LOG_TAG = "myLogs";
+    private final String DIALOG_DELETE_GOODS = "DeleteGoods";
+    private final String DIALOG_EDIT_GOODS = "EditGoods";
+
+    private final int GROUPS_LOADER = 1;
+    private final int GOODS_LOADER = 2;
 
     private static long DB_RECORD_ID = 0;
 
     private final Context context;
-    AppCompatActivity activity;
+    private WarehouseActivity activity;
 
-    BDHandlerContract db;
-    SimpleCursorAdapter scAdapter;
+    private BDHandlerContract db;
+    private SimpleCursorAdapter lvAdapter;
+    private SimpleCursorAdapter spnAdapter;
 
-    ListView lv;
-    Map<String, DialogFragment> dialogs;
+    private ListView lv;
+
+    private Map<String, DialogFragment> dialogs;
 
     public WarehousePresenter(Context context) {
         this.context = context;
-        this.activity = (AppCompatActivity) context;
+        this.activity = (WarehouseActivity) context;
 
         db = new DBHandler(context);
         db.openDBConnection();
 
-        lv = (ListView) activity.findViewById(R.id.a_warehouse_lv);
+        dialogs = new HashMap<>();
 
-        String[] from = new String[]{DBTables.GOODS_INNER_CODE, DBTables.GOODS_NAME, DBTables.GOODS_PURCHASE_PRICE};
-        int[] to = new int[]{R.id.textView1, R.id.textView2, R.id.textView3};
+        String[] from = new String[]{DBTables.GOODS_NAME, DBTables.GOODS_QUANTITY, DBTables.GOODS_PURCHASE_PRICE, DBTables.GOODS_PRICE, DBTables.GOODS_INNER_CODE};
+        int[] to = new int[]{R.id.a_w_item_tv_goods_name, R.id.a_w_item_tv_goods_qty, R.id.a_w_item_tv_goods_purchase_price, R.id.a_w_item_tv_goods_price, R.id.a_w_item_tv_goods_inner_code};
 
-        scAdapter = new SimpleCursorAdapter(context, R.layout.item, null, from, to, 0);
-        lv.setAdapter(scAdapter);
+        Spinner spn = activity.findViewById(R.id.a_warehouse_spn);
+        spnAdapter = new SimpleCursorAdapter(context, android.R.layout.simple_spinner_item, null,
+                new String[]{DBTables.GROUP_NAME}, new int[]{android.R.id.text1}, GROUPS_LOADER);
+        spn.setAdapter(spnAdapter);
+        //spn.setPrompt("Title");
 
-        dialogs = new HashMap<String, DialogFragment>();
+        lv = activity.findViewById(R.id.a_warehouse_lv);
+        lvAdapter = new SimpleCursorAdapter(context, R.layout.activity_warehouse_item, null, from, to, GOODS_LOADER);
+        lv.setAdapter(lvAdapter);
+    }
+
+    @Override
+    public void initLoaders() {
+        Log.d(LOG_TAG, "initLoaders()");
+        activity.getSupportLoaderManager().initLoader(GROUPS_LOADER, null, activity);
+        activity.getSupportLoaderManager().initLoader(GOODS_LOADER, null, activity);
     }
 
     @Override
@@ -139,11 +153,12 @@ public class WarehousePresenter implements WarehouseContract {
 
         long rowID = db.insertRecord(DBTables.TABLE_GOODS, cv);
 
-        activity.getSupportLoaderManager().getLoader(0).forceLoad();
+        activity.getSupportLoaderManager().getLoader(GOODS_LOADER).forceLoad();
 
         Log.d(LOG_TAG, "row inserted, ID = " + rowID);
     }
 
+    @Override
     public void buttonClick(int buttonId) {
         //Intent intent = null;
 
@@ -151,12 +166,14 @@ public class WarehousePresenter implements WarehouseContract {
             case R.id.add_goods_btn:
                 //intent = new Intent(activity, AddGoodsActivity.class);
 
-                insertGoods();
+                //insertGoods();
                 break;
 
             case R.id.button1:
-                //intent = new Intent(activity, AddGoodsActivity.class);
 
+
+
+                //intent = new Intent(activity, AddGoodsActivity.class);
                 //loadGoods();
                 break;
         }
@@ -167,6 +184,26 @@ public class WarehousePresenter implements WarehouseContract {
         }
 
         activity.startActivity(intent);*/
+    }
+
+    @Override
+    public void onItemSelected(long dbRecordId) {
+        /*if (dbRecordId == context.getResources().getInteger(R.integer.all_group_id)) {
+            //activity.getSupportLoaderManager().initLoader(GOODS_LOADER, null, activity);
+            //activity.getSupportLoaderManager().getLoader(GOODS_LOADER).forceLoad();
+            return;
+        }*/
+
+        /*Log.d(LOG_TAG, "onItemSelected(" + dbRecordId + ");");
+
+        if (dbRecordId == context.getResources().getInteger(R.integer.all_group_id)) {
+            return;
+        }
+
+        Bundle b = new Bundle();
+        b.putLong(DBTables.GOODS_GROUP_ID, dbRecordId);
+        //activity.getSupportLoaderManager().restartLoader(GOODS_LOADER, b, activity);
+        activity.getSupportLoaderManager().initLoader(GOODS_LOADER, b, activity);*/
     }
 
     @Override
@@ -224,38 +261,44 @@ public class WarehousePresenter implements WarehouseContract {
 
             case DIALOG_DELETE_GOODS:
 
-                if (result) db.deleteRecordById(DB_RECORD_ID, DBTables.TABLE_GOODS);
+                if (result) db.deleteRecordById(DBTables.TABLE_GOODS, DB_RECORD_ID);
 
-                activity.getSupportLoaderManager().getLoader(0).forceLoad();
+                activity.getSupportLoaderManager().getLoader(GOODS_LOADER).forceLoad();
                 Toast.makeText(activity, "DeleteGoods: " + DB_RECORD_ID + " res: " + result, Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG, "Delete goods, ID: " + DB_RECORD_ID + " res: " + result);
                 break;
         }
     }
 
-    public MyCursorLoader GetMyCursorLoader() {
-        return new MyCursorLoader(context, db);
-    }
+    public MyCursorLoader GetMyCursorLoader(int loaderId, Bundle bundle) {
 
-    public void swapCursor(Cursor cursor) {
-        scAdapter.swapCursor(cursor);
-    }
-
-    static class MyCursorLoader extends CursorLoader {
-
-        BDHandlerContract db;
-        final String LOG_TAG = "myLogs";
-
-        public MyCursorLoader(Context context, BDHandlerContract db) {
-            super(context);
-            this.db = db;
+        if (bundle == null) {
+            switch (loaderId) {
+                case GROUPS_LOADER:
+                    Log.d(LOG_TAG, "GetMyCursorLoader(" + loaderId + ", " + bundle + ");");
+                    return new MyCursorLoader(context, db, DBTables.TABLE_GROUPS);
+                case GOODS_LOADER:
+                    Log.d(LOG_TAG, "GetMyCursorLoader(" + loaderId + ", " + bundle + ");");
+                    return new MyCursorLoader(context, db, DBTables.TABLE_GOODS);
+            }
+        } else {
+            Log.d(LOG_TAG, "GetMyCursorLoader(" + loaderId + ", " + bundle + ");");
+            return new MyCursorLoader(context, db, DBTables.TABLE_GOODS, bundle.getLong(DBTables.GOODS_GROUP_ID));
         }
 
-        @Override
-        public Cursor loadInBackground() {
-            Cursor cursor = db.getAllTableDataCursor(DBTables.TABLE_GOODS);
-            Log.d(LOG_TAG, "loadInBackground");
-            return cursor;
+        return null;
+    }
+
+    public void swapCursor(int loaderId, Cursor cursor) {
+        switch (loaderId) {
+            case GOODS_LOADER:
+                Log.d(LOG_TAG, "swapCursor(" + loaderId + ", " + cursor.toString().replace("android.database.sqlite.", "") + ");");
+                lvAdapter.swapCursor(cursor);
+                break;
+            case GROUPS_LOADER:
+                Log.d(LOG_TAG, "swapCursor(" + loaderId + ", " + cursor.toString().replace("android.database.sqlite.", "") + ");");
+                spnAdapter.swapCursor(cursor);
+                break;
         }
     }
 }
